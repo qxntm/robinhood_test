@@ -1,43 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:robinhood_test/helper/api_client.dart';
+import 'package:robinhood_test/helper/tasks_helper.dart';
 import '../models/task.dart';
 
-class TasksNotifier extends StateNotifier<List<Task>> {
+class TasksNotifier extends StateNotifier<Map<String, List<Task>>> {
   final ApiClient apiClient;
   final String tab;
 
-  TasksNotifier(this.apiClient, this.tab) : super([]) {
-    _loadTasks(tab);
+  TasksNotifier(this.apiClient, this.tab) : super({}) {
+    _loadTasks();
   }
 
-  Future<void> _loadTasks(String tab,{
-    int offset = 0,
-    int limit = 10,
-    String sortBy = 'createdAt',
-    bool isAsc = true,
-  }) async {
-    // If the state is already populated, don't call the API again
-    if (state.isEmpty) {
-      try {
-        final tasks = await apiClient.fetchTasks(
-          tab,
-          offset: offset,
-          limit: limit,
-          sortBy: sortBy,
-          isAsc: isAsc,
-          status: tab,
-        );
-        state = tasks; // Update state only if tasks are successfully fetched
-      } catch (e) {
-        // Handle errors (optional)
-        debugPrint("Error fetching tasks: $e");
-      }
+  // Load tasks from API and group by date
+  Future<void> _loadTasks() async {
+    try {
+      final tasks = await apiClient.fetchTasks(tab);
+
+      // Group tasks by date before updating state
+      state = groupTasksByDate(tasks);
+    } catch (error) {
+      debugPrint("Error loading tasks: $error");
     }
   }
 
+  // Delete a task and update the state
   Future<void> deleteTask(String id) async {
-    // Filter out the task by ID and update the state
-    state = state.where((task) => task.id != id).toList();
+    final updatedState = <String, List<Task>>{};
+
+    // Iterate through each group and filter out the task with the matching ID
+    state.forEach((key, tasks) {
+      final updatedTasks = tasks.where((task) => task.id != id).toList();
+
+      // Only add groups that have remaining tasks
+      if (updatedTasks.isNotEmpty) {
+        updatedState[key] = updatedTasks;
+      }
+    });
+
+    // Update the state with the new map
+    state = updatedState;
   }
 }

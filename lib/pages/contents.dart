@@ -10,27 +10,48 @@ class Contents extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tasks = ref.watch(
-        tasksProvider(tab)); // Watch the tasks provider for the selected tab
+    final tasksMap = ref.watch(tasksProvider(tab));
 
-    return tasks.isEmpty
-        ? const Center(child: CircularProgressIndicator()) // Loading state
-        : ListView.builder(
-            itemCount: tasks.length,
-            itemBuilder: (context, index) {
-              final task = tasks[index];
+    if (tasksMap.isEmpty) {
+      return const Center(child: Text("No tasks available"));
+    }
 
-              return TaskCard(
-                tab: tab,
-                title: task.title,
-                description:
-                    task.description,
-                id: task.id,
-                onDismissed: (id) {
-                  ref.read(tasksProvider(tab).notifier).deleteTask(id);
+    return ListView(
+      children: tasksMap.entries.map((entry) {
+        final label = entry.key;
+        final taskList = entry.value;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 20, top: 20, bottom: 0),
+              child: Text(
+                label,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ),
+            ...taskList.map((task) {
+              return Dismissible(
+                key: ValueKey(task.id),
+                onDismissed: (_) {
+                  ref.read(tasksProvider(tab).notifier).deleteTask(task.id);
                 },
+                background: Container(color: Colors.red),
+                child: TaskCard(
+                  tab: tab,
+                  title: task.title,
+                  description: task.description,
+                  id: task.id,
+                  onDismissed: (id) {
+                    ref.read(tasksProvider(tab).notifier).deleteTask(id);
+                  },
+                ),
               );
-            },
-          );
+            }).toList(),
+          ],
+        );
+      }).toList(),
+    );
   }
 }

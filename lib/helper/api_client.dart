@@ -8,7 +8,7 @@ class ApiClient {
 
   Future<List<Task>> fetchTasks(String tab, {
     int offset = 0,
-    int limit = 20,
+    int limit = 10,
     String sortBy = 'createdAt',
     bool isAsc = true,
     String status = 'TODO',
@@ -26,12 +26,13 @@ class ApiClient {
       );
 
       // Make sure to extract the tasks from the response
-      List<dynamic> taskList = response.data['tasks'];  // Access the 'tasks' field
+      List<dynamic> taskList = response.data['tasks'];
       return taskList.map((data) {
         return Task(
           id: data['id'],
           title: data['title'],
-          description: data['description'],  // Ensure you add the description if it exists
+          description: data['description'],
+          createdAt: data['createdAt'],
         );
       }).toList();
     } catch (e) {
