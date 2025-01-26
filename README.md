@@ -1,6 +1,6 @@
-# my_app
+# Robinhood test
 
-A new Flutter project.
+A Flutter project for Robinhood's test
 
 ## Getting Started
 
