@@ -1,30 +1,54 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:robinhood_test/helper/api_client.dart';
 import 'package:robinhood_test/main.dart';
+import 'package:robinhood_test/models/task.dart';
+import 'package:robinhood_test/providers/state_provider.dart';
+
+class MockApiClient extends ApiClient {
+  @override
+  Future<List<Task>> fetchTasks(
+    String tab, {
+    int offset = 0,
+    int limit = 10,
+    String sortBy = 'createdAt',
+    bool isAsc = true,
+    String status = 'TODO',
+  }) async {
+    // Return empty list for testing
+    return [];
+  }
+}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  tearDown(() {
+    TestWidgetsFlutterBinding.ensureInitialized()
+        .window
+        .clearPhysicalSizeTestValue();
+    TestWidgetsFlutterBinding.ensureInitialized()
+        .window
+        .clearDevicePixelRatioTestValue();
+  });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets('App should render without errors', (WidgetTester tester) async {
+    // Set a reasonable screen size for testing
+    tester.binding.window.physicalSizeTestValue = Size(400, 800);
+    tester.binding.window.devicePixelRatioTestValue = 1.0;
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          // Override the API client provider with our mock
+          apiClientProvider.overrideWithValue(MockApiClient()),
+        ],
+        child: MyApp(),
+      ),
+    );
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    await tester.pumpAndSettle();
+
+    // Verify that the app renders without throwing any errors
+    expect(find.byType(MaterialApp), findsOneWidget);
   });
 }

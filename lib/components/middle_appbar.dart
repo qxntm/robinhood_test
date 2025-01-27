@@ -18,19 +18,20 @@ class MiddleAppBar extends StatelessWidget {
             collapseMode: CollapseMode.parallax,
             background: Container(
               color: Theme.of(context).colorScheme.onPrimary,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 15),
-                          child: Row(
-                            children: [
-                              Column(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
                                     "Hi! User",
@@ -38,23 +39,27 @@ class MiddleAppBar extends StatelessWidget {
                                         .textTheme
                                         .displayMedium,
                                   ),
-                                  Text("This is just a sample UI.",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .displaySmall),
-                                  Text("Open to create your style :D",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .displaySmall),
+                                  Text(
+                                    "This is just a sample UI.",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .displaySmall,
+                                  ),
+                                  Text(
+                                    "Open to create your style :D",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .displaySmall,
+                                  ),
                                 ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           );
