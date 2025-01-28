@@ -1,16 +1,33 @@
-# Robinhood test
+# Task Management App
 
-A Flutter project for Robinhood's test
+A Flutter application that demonstrates a task management system with TODO, DOING, and DONE states. Built as a technical assessment project.
+
+## Features
+
+- View tasks organized by their status (TODO, DOING, DONE)
+- Tasks are grouped by date (Today, Tomorrow, and future dates)
+- Swipe-to-delete functionality for tasks
+- Infinite scroll pagination for loading more tasks
+- Clean and modern UI with custom tab navigation
+- Responsive design that works across different screen sizes
+
+## Technical Implementation
+
+- **State Management**: Uses Flutter Riverpod for efficient state management
+- **API Integration**: Implements REST API calls using Dio
+- **Testing**: Includes unit tests and widget tests
+- **UI Components**: Custom-built reusable widgets
+- **Architecture**: Follows a clean architecture pattern with separation of concerns
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+- Flutter SDK (latest stable version)
+- Dart SDK
+- An IDE (VS Code, Android Studio, or IntelliJ)
+- Git
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Installation
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Clone the repository:
