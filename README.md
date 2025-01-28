@@ -33,12 +33,12 @@ flutter test
 
 ### Project Structure
 
-lib/
-├── components/ `Reusable UI components`
-├── helper/ `Helper functions and utilities`
-├── models/ `Data models`
-├── notifiers/ `State management notifiers`
-├── pages/ `Screen/Page widgets`
-├── providers/ `Riverpod providers`
-└── main.dart `Application entry point`
+lib/  
+├── components/ `Reusable UI components`  
+├── helper/ `Helper functions and utilities`  
+├── models/ `Data models`  
+├── notifiers/ `State management notifiers`  
+├── pages/ `Screen/Page widgets`  
+├── providers/ `Riverpod providers`    
+└── main.dart `Application entry point`  
 
