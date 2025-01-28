@@ -10,7 +10,7 @@ A Flutter application that demonstrates a task management system with TODO, DOIN
 - Infinite scroll pagination for loading more tasks
 
 > [!TIP]
-> You can also make the app bar collapse to extend the task list viewing area by simply swiping on the app bar area
+> You can also make the app bar collapse to extend the task list viewing area by simply swiping upwards on the app bar area
 
 ## Technical Implementation
 
