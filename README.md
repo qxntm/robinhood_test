@@ -18,6 +18,9 @@ A Flutter application that demonstrates a task management system with TODO, DOIN
 
 ### Installation
 
+> [!IMPORTANT]  
+> The device that clones the repository and runs the application needs to be connected to the internet.
+
 ```
 git clone https://github.com/qxntm/robinhood_test.git
 cd task-management-app
