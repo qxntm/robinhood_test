@@ -9,6 +9,9 @@ A Flutter application that demonstrates a task management system with TODO, DOIN
 - Swipe-to-delete functionality for tasks
 - Infinite scroll pagination for loading more tasks
 
+> [!TIP]
+> You can also make the app bar collapse to extend the task list viewing area by simply swiping on the app bar area
+
 ## Technical Implementation
 
 - **State Management**: Uses Flutter Riverpod for efficient state management
