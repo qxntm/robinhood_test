@@ -1,15 +1,13 @@
 # Task Management App
 
-A Flutter application that demonstrates a task management system with TODO, DOING, and DONE states. Built as a technical assessment project.
+A Flutter application that demonstrates a task management system with TODO, DOING, and DONE states. Built as a technical assessment project for Purple Ventures co. ltd (Robinhood).
 
 ## Features
 
 - View tasks organized by their status (TODO, DOING, DONE)
-- Tasks are grouped by date (Today, Tomorrow, and future dates)
+- Tasks are grouped by create date ascending (Today, Tomorrow, and future dates)
 - Swipe-to-delete functionality for tasks
 - Infinite scroll pagination for loading more tasks
-- Clean and modern UI with custom tab navigation
-- Responsive design that works across different screen sizes
 
 ## Technical Implementation
 
@@ -17,17 +15,30 @@ A Flutter application that demonstrates a task management system with TODO, DOIN
 - **API Integration**: Implements REST API calls using Dio
 - **Testing**: Includes unit tests and widget tests
 - **UI Components**: Custom-built reusable widgets
-- **Architecture**: Follows a clean architecture pattern with separation of concerns
-
-## Getting Started
-
-### Prerequisites
-
-- Flutter SDK (latest stable version)
-- Dart SDK
-- An IDE (VS Code, Android Studio, or IntelliJ)
-- Git
 
 ### Installation
 
-1. Clone the repository:
+```
+git clone https://github.com/qxntm/robinhood_test.git
+cd task-management-app
+flutter pub get
+flutter run
+```
+
+### Running Test
+
+```
+flutter test
+```
+
+### Project Structure
+
+lib/
+├── components/ `Reusable UI components`
+├── helper/ `Helper functions and utilities`
+├── models/ `Data models`
+├── notifiers/ `State management notifiers`
+├── pages/ `Screen/Page widgets`
+├── providers/ `Riverpod providers`
+└── main.dart `Application entry point`
+
