@@ -6,7 +6,7 @@ class ApiClient {
 
   ApiClient({Dio? customDio}) : dio = customDio ?? Dio();
 
-  Future<List<Task>> fetchTasks(String tab, {
+  Future<List<Task>> fetchTasks(String tab, int pageNumber, {
     int offset = 0,
     int limit = 10,
     String sortBy = 'createdAt',
@@ -17,7 +17,7 @@ class ApiClient {
       final response = await dio.get(
         'https://todo-list-api-mfchjooefq-as.a.run.app/todo-list',
         queryParameters: {
-          'offset': offset,
+          'offset': pageNumber,
           'limit': limit,
           'sortBy': sortBy,
           'isAsc': isAsc,

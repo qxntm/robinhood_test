@@ -9,7 +9,8 @@ import 'package:robinhood_test/providers/state_provider.dart';
 class MockApiClient extends ApiClient {
   @override
   Future<List<Task>> fetchTasks(
-    String tab, {
+    String tab,
+    int pageNumber, {
     int offset = 0,
     int limit = 10,
     String sortBy = 'createdAt',

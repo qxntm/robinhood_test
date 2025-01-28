@@ -36,7 +36,7 @@ void main() {
                 requestOptions: RequestOptions(path: ''),
               ));
 
-      final result = await apiClient.fetchTasks('TODO');
+      final result = await apiClient.fetchTasks('TODO', 0);
 
       expect(result.length, 1);
       expect(result[0].id, '1');
@@ -48,7 +48,7 @@ void main() {
           .thenThrow(Exception('Network error'));
 
       expect(
-        () => apiClient.fetchTasks('TODO'),
+        () => apiClient.fetchTasks('TODO', 0),
         throwsException,
       );
     });

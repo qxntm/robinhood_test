@@ -7,18 +7,27 @@ import '../models/task.dart';
 class TasksNotifier extends StateNotifier<Map<String, List<Task>>> {
   final ApiClient apiClient;
   final String tab;
+  int _pageNumber = 0; // Start with page 0
 
   TasksNotifier(this.apiClient, this.tab) : super({}) {
-    _loadTasks();
+    fetchTasks();
   }
 
   // Load tasks from API and group by date
-  Future<void> _loadTasks() async {
+  Future<void> fetchTasks() async {
     try {
-      final tasks = await apiClient.fetchTasks(tab);
+      final tasks = await apiClient.fetchTasks(tab, _pageNumber);
 
-      // Group tasks by date before updating state
-      state = groupTasksByDate(tasks);
+      if (_pageNumber == 0) {
+        // First load: replace state
+        state = groupTasksByDate(tasks);
+      } else {
+        // Subsequent loads: merge with existing state
+        final newGroupedTasks = groupTasksByDate(tasks);
+        state = {...state, ...newGroupedTasks};
+      }
+
+      _pageNumber++; // Increment for next fetch
     } catch (error) {
       debugPrint("Error loading tasks: $error");
     }
