@@ -33,51 +33,88 @@ class _ContentsState extends ConsumerState<Contents> {
 
   @override
   Widget build(BuildContext context) {
+    final tasksNotifier = ref.watch(tasksProvider(widget.tab).notifier);
     final tasksMap = ref.watch(tasksProvider(widget.tab));
+
+    if (tasksMap.isEmpty && tasksNotifier.isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
     if (tasksMap.isEmpty) {
       return const Center(child: Text("No tasks available"));
     }
 
-    return ListView(
-      controller: scrollController,
-      children: tasksMap.entries.map((entry) {
-        final label = entry.key;
-        final taskList = entry.value;
+    return Column(
+      children: [
+        Expanded(
+          child: ListView(
+            controller: scrollController,
+            children: [
+              ...tasksMap.entries.map((entry) {
+                final label = entry.key;
+                final taskList = entry.value;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 20, top: 20, bottom: 0),
-              child: Text(
-                label,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ),
-            ...taskList.map((task) {
-              return Dismissible(
-                key: ValueKey(task.id),
-                onDismissed: (_) {
-                  ref
-                      .read(tasksProvider(widget.tab).notifier)
-                      .deleteTask(task.id);
-                },
-                background: Container(color: Colors.red),
-                child: TaskCard(
-                  tab: widget.tab,
-                  title: task.title,
-                  description: task.description,
-                  id: task.id,
-                  onDismissed: (id) {
-                    ref.read(tasksProvider(widget.tab).notifier).deleteTask(id);
-                  },
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 20, top: 20, bottom: 0),
+                      child: Text(
+                        label,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ),
+                    ...taskList.map((task) {
+                      return Dismissible(
+                        key: ValueKey(task.id),
+                        onDismissed: (_) {
+                          ref
+                              .read(tasksProvider(widget.tab).notifier)
+                              .deleteTask(task.id);
+                        },
+                        background: Container(color: Colors.red),
+                        child: TaskCard(
+                          tab: widget.tab,
+                          title: task.title,
+                          description: task.description,
+                          id: task.id,
+                          onDismissed: (id) {
+                            ref
+                                .read(tasksProvider(widget.tab).notifier)
+                                .deleteTask(id);
+                          },
+                        ),
+                      );
+                    }).toList(),
+                  ],
+                );
+              }).toList(),
+              if (tasksNotifier.isLoading)
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
                 ),
-              );
-            }).toList(),
-          ],
-        );
-      }).toList(),
+              if (tasksNotifier.hasReachedEnd)
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Center(
+                    child: Text(
+                      'You have reached the end of the list',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

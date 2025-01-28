@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:robinhood_test/models/api.dart';
 import '../models/task.dart';
 
 class ApiClient {
@@ -6,7 +7,9 @@ class ApiClient {
 
   ApiClient({Dio? customDio}) : dio = customDio ?? Dio();
 
-  Future<List<Task>> fetchTasks(String tab, int pageNumber, {
+  Future<ApiResponse> fetchTasks(
+    String tab,
+    int pageNumber, {
     int offset = 0,
     int limit = 10,
     String sortBy = 'createdAt',
@@ -25,16 +28,13 @@ class ApiClient {
         },
       );
 
-      // Make sure to extract the tasks from the response
       List<dynamic> taskList = response.data['tasks'];
-      return taskList.map((data) {
-        return Task(
-          id: data['id'],
-          title: data['title'],
-          description: data['description'],
-          createdAt: data['createdAt'],
-        );
-      }).toList();
+      int totalPages = response.data['totalPages'] ?? 1;
+
+      return ApiResponse(
+        tasks: taskList.map((data) => Task.fromJson(data)).toList(),
+        totalPages: totalPages,
+      );
     } catch (e) {
       throw Exception('Failed to fetch tasks: $e');
     }

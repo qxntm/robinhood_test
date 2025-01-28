@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:robinhood_test/helper/api_client.dart';
+import 'package:robinhood_test/helper/api.dart';
 import 'package:robinhood_test/main.dart';
-import 'package:robinhood_test/models/task.dart';
+import 'package:robinhood_test/models/api.dart';
 import 'package:robinhood_test/providers/state_provider.dart';
 
 class MockApiClient extends ApiClient {
   @override
-  Future<List<Task>> fetchTasks(
+  Future<ApiResponse> fetchTasks(
     String tab,
     int pageNumber, {
     int offset = 0,
@@ -17,8 +17,7 @@ class MockApiClient extends ApiClient {
     bool isAsc = true,
     String status = 'TODO',
   }) async {
-    // Return empty list for testing
-    return [];
+    return ApiResponse(tasks: [], totalPages: 1);
   }
 }
 

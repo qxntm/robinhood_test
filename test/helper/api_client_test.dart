@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:robinhood_test/helper/api_client.dart';
+import 'package:robinhood_test/helper/api.dart';
 
 @GenerateMocks([Dio])
 import 'api_client_test.mocks.dart';
@@ -38,9 +38,9 @@ void main() {
 
       final result = await apiClient.fetchTasks('TODO', 0);
 
-      expect(result.length, 1);
-      expect(result[0].id, '1');
-      expect(result[0].title, 'Test Task');
+      expect(result.tasks.length, 1);
+      expect(result.tasks[0].id, '1');
+      expect(result.tasks[0].title, 'Test Task');
     });
 
     test('fetchTasks throws exception on error', () async {

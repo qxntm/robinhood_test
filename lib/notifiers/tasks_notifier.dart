@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:robinhood_test/helper/api_client.dart';
+import 'package:robinhood_test/helper/api.dart';
 import 'package:robinhood_test/helper/tasks_helper.dart';
 import '../models/task.dart';
 
 class TasksNotifier extends StateNotifier<Map<String, List<Task>>> {
   final ApiClient apiClient;
   final String tab;
-  int _pageNumber = 0; // Start with page 0
+  int _pageNumber = 0;
+  int _totalPages = 1;
+  bool _isLoading = false;
+  bool _hasReachedEnd = false;
+
+  bool get isLoading => _isLoading;
+  bool get hasReachedEnd => _hasReachedEnd;
 
   TasksNotifier(this.apiClient, this.tab) : super({}) {
     fetchTasks();
@@ -15,21 +21,28 @@ class TasksNotifier extends StateNotifier<Map<String, List<Task>>> {
 
   // Load tasks from API and group by date
   Future<void> fetchTasks() async {
+    if (_isLoading || _hasReachedEnd) return;
+
     try {
-      final tasks = await apiClient.fetchTasks(tab, _pageNumber);
+      _isLoading = true;
+      final response = await apiClient.fetchTasks(tab, _pageNumber);
+
+      _totalPages = response.totalPages;
+      final tasks = response.tasks;
 
       if (_pageNumber == 0) {
-        // First load: replace state
         state = groupTasksByDate(tasks);
       } else {
-        // Subsequent loads: merge with existing state
         final newGroupedTasks = groupTasksByDate(tasks);
         state = {...state, ...newGroupedTasks};
       }
 
-      _pageNumber++; // Increment for next fetch
+      _pageNumber++;
+      _hasReachedEnd = _pageNumber >= _totalPages;
     } catch (error) {
       debugPrint("Error loading tasks: $error");
+    } finally {
+      _isLoading = false;
     }
   }
 
